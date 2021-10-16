@@ -1,25 +1,24 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media} from 'reactstrap';
 import {Link} from 'react-router-dom';
 
 const RenderLeader = ({leader}) => (
     <Media key={leader.id} tag="li" className="mb-5">
-      <Media left className="mr-5">
-        <Media object src={leader.image} alt={leader.name}/>
-      </Media>
-      <Media body>
-        <Media heading>{leader.name}</Media>
-        <p>{leader.designation}</p>
-        {leader.description}
-      </Media>
+        <Media left className="mr-5">
+            <Media object src={leader.image} alt={leader.name}/>
+        </Media>
+        <Media body>
+            <Media heading>{leader.name}</Media>
+            <p>{leader.designation}</p>
+            {leader.description}
+        </Media>
     </Media>
 );
 
-function About(props) {
+function About(props) 
+{
 
   const leaders = props.leaders.map(leader => <RenderLeader leader={leader}/>);
-
   return (
       <div className="container">
         <div className="row">
@@ -89,7 +88,3 @@ function About(props) {
 }
 
 export default About;
-
-About.propTypes = {
-  leaders: PropTypes.arrayOf(PropTypes.object).isRequired
-};
