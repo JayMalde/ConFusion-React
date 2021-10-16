@@ -2,10 +2,15 @@ import React, {Component} from 'react';
 import Menu from './MenuComponent';
 import DishDetailComponent from './DishDetailComponent';
 import {DISHES} from '../dishes';
+import {LEADERS} from '../leaders';
+import {PROMOTIONS} from '../promotions';
+import {COMMENTS} from '../comments';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import {Switch,Route,Redirect} from "react-router-dom";
 import Home from './HomeComponent';
+import Contact from "./ContactComponent.js";
+import About from "./AboutComponent.js";
 class Main extends Component {
 
   constructor(props) {
@@ -13,7 +18,9 @@ class Main extends Component {
 
     this.state = {
       dishes: DISHES,
-      selectedDish: null
+      comments: COMMENTS,
+      leaders: LEADERS,
+      promotions: PROMOTIONS,
     };
   }
 
@@ -21,7 +28,10 @@ class Main extends Component {
   render() {
     const HomePage=()=>{
       return(
-        <Home/>
+        <Home dish={this.state.dishes.filter((dish)=>dish.featured)[0]}
+        promotion={this.state.promotions.filter(p => p.featured)[0]}
+        leader={this.state.leaders.filter(l => l.featured)[0]}
+        />
       )
     }
     return (
@@ -29,6 +39,8 @@ class Main extends Component {
             <Header/>
             <Switch>
                 <Route path="/home" component={HomePage}/>
+                <Route path="/aboutus" component={About}/>
+                <Route path="/contactus" component={Contact}/>
                 <Route exact path="/menu" component={()=><Menu dishes={this.state.dishes} />}/> 
                 <Redirect to="/home"/>
             </Switch>
