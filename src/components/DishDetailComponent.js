@@ -2,7 +2,7 @@ import React from 'react';
 import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Container, Row, Col, Button, Label, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {LocalForm, Control, Errors} from 'react-redux-form';
-
+const required = val => val && val.length > 0;
 const maxLength = len => val => !val || val.length <= len;
 const minLength = len => val => val && val.length >= len;
 
@@ -10,17 +10,17 @@ class CommentForm extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       modal: false
     };
   }
 
-  toggle = () => this.setState({modal: !this.state.modal});
-
-  handleSubmit(values) {
-    console.log('Current State is: ' + JSON.stringify(values));
-    alert('Current State is: ' + JSON.stringify(values));
+  toggle = () => {
+    this.setState({modal: !this.state.modal});
+  }
+  handleSubmit=({rating,author,comment})=> {
+    this.toggle();
+    this.props.addComment(this.props.dishId,Number(rating),author,comment);
   }
 
   render() {
@@ -37,7 +37,7 @@ class CommentForm extends React.Component {
                 <LocalForm onSubmit={this.handleSubmit}>
                   <Row className="form-group">
                     <Label htmlFor="rating">Rating</Label>
-                    <Control.select model=".rating" id="rating" className="form-control">
+                    <Control.select model=".rating" id="rating" defaultValue="1" className="form-control">
                       <option>1</option>
                       <option>2</option>
                       <option>3</option>
@@ -60,7 +60,7 @@ class CommentForm extends React.Component {
                   </Row>
                   <Row className="form-group">
                     <Label htmlFor="comment">Comment</Label>
-                    <Control.textarea model=".comment" id="comment" rows="5" className="form-control"/>
+                    <Control.textarea model=".comment" id="comment" rows="5" className="form-control" rows="5" validators={{required}} />
                   </Row>
                   <Row className="form-group">
                     <Button color="primary" type="submit">Submit</Button>
@@ -86,7 +86,7 @@ const RenderDish = ({dish}) => (
     </Col>
 );
 
-function RenderComments({comments}) {
+function RenderComments({comments, addComment, dishId}) {
   if (comments != null) {
     const dtf = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: 'short', day: '2-digit'});
 
@@ -103,7 +103,7 @@ function RenderComments({comments}) {
           <ul className="list-unstyled">
             {commentItems}
           </ul>
-          <CommentForm/>
+          <CommentForm dishId={dishId} addComment={addComment} />
         </Col>
     );
   } else {
@@ -111,7 +111,7 @@ function RenderComments({comments}) {
   }
 }
 
-function DishDetailComponent({dish, comments}) {
+function DishDetailComponent({dish, comments,addComment}) {
   if (dish != null) {
     return (
         <Container>
@@ -127,7 +127,7 @@ function DishDetailComponent({dish, comments}) {
           </Row>
           <Row>
             <RenderDish dish={dish}/>
-            <RenderComments comments={comments}/>
+            <RenderComments comments={comments} addComment={addComment} dishId={dish.id}/>
           </Row>
         </Container>
     );
