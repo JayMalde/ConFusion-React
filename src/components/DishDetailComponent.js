@@ -3,6 +3,8 @@ import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem
 import {Link} from 'react-router-dom';
 import {LocalForm, Control, Errors} from 'react-redux-form';
 import {Loading} from "./LoadingComponent";
+import { baseUrl } from '../baseUrl';
+
 const required = val => val && val.length > 0;
 const maxLength = len => val => !val || val.length <= len;
 const minLength = len => val => val && val.length >= len;
@@ -78,7 +80,7 @@ class CommentForm extends React.Component {
 const RenderDish = ({dish}) => (
     <Col md={5} className="m-1">
       <Card>
-        <CardImg width="100%" src={dish.image} alt={dish.name}/>
+        <CardImg width="100%" src={baseUrl+"image/"+dish.image} alt={dish.name}/>
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
